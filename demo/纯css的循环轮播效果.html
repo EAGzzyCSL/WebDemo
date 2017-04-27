@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>纯css的循环轮播效果</title>
+  <style>
+    .__banner {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .__wraper {
+      position: relative;
+      height: 100%;
+    }
+
+    .__line {
+      flex: 1 0 50%;
+      display: flex;
+      position: absolute;
+    }
+
+    @keyframes __sw1 {
+      0% {
+        left: 0;
+      }
+      100% {
+        left: 50%;
+      }
+    }
+
+    @keyframes __sw2 {
+      0% {
+        left: 50%;
+      }
+      100% {
+        left: 0;
+      }
+    }
+
+    .__wraper>div:first-child {
+      animation: 5s banner ease infinite, 5s sw1 steps(1) infinite;
+    }
+
+    .__wraper>div:last-child {
+      animation: 5s banner ease infinite, 5s sw2 steps(1) infinite;
+      left: 100%;
+    }
+  </style>
+  <style>
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #banner {
+      border: solid 5px black;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>纯css的循环轮播效果</h1>
+  <div id="banner"></div>
+  <script>
+    // 使用js是为了完成动画的初始化工作，滚动本身的逻辑与js无关
+    var banner = document.querySelector('#banner');
+    (new(function() {
+      this.init = function(o) {
+        this.genAni(o.imgs.length);
+        banner.classList.add('__banner');
+        banner.style.width = o.width + 'px';
+        banner.style.height = o.height + 'px';
+        var wraper = document.createElement('div');
+        wraper.classList.add('__wraper');
+        wraper.style.width = o.imgs.length * o.width + 'px';
+        var line = document.createElement('div');
+        line.classList.add('__line');
+        o.imgs.forEach(function(v) {
+          var img = document.createElement('img');
+          img.setAttribute('src', v);
+          img.style.width = o.width + 'px';
+          img.style.height = o.height + 'px';
+          line.append(img);
+        });
+        var line_clone = line.cloneNode(true);
+        wraper.append(line);
+        wraper.append(line_clone);
+        banner.append(wraper);
+      }
+      this.genAni = function(length) {
+        var kf = '@keyframes banner {\n';
+        var m = length * 2 + 1;
+        for (var i = 0; i <= m; i++) {
+          kf += i / m * 100 + '% {\n';
+          kf += 'transform: translateX(-' + Math.floor(i / 2) / length * 100 + '%);\n';
+          kf += '}\n';
+        }
+        kf += '}\n';
+        var style = document.createElement('style');
+        style.innerHTML = kf;
+        document.head.append(style);
+      }
+    })()).init({
+      banner: banner,
+      width: 640,
+      height: 360,
+      imgs: [
+        '../imgs/img_1.jpg',
+        '../imgs/img_2.jpg',
+        '../imgs/img_3.jpg',
+        '../imgs/img_4.jpg'
+      ],
+
+    })
+  </script>
+</body>
+
+</html>

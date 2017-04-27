@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+</head>
+
+<body>
+  <ul id="ul_list"></ul>
+  <p>
+    demo中的图片来自免费图片网站<a href="https://pixabay.com">pixabay</a>
+  </p>
+  <script>
+    var list = [
+      '纯css的循环轮播效果'
+    ];
+    var ul_list = document.querySelector('#ul_list');
+    (function() {
+      var ih = ''
+      list.forEach(function(v) {
+        ih += '<li><a href="demo/' + v + '.html">' + v + '</a></li>';
+      });
+      ul_list.innerHTML = ih;
+    })();
+  </script>
+</body>
+
+</html>
