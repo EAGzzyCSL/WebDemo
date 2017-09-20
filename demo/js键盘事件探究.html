@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>js键盘事件探究</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    #div_wrapper {
+      height: 100%;
+      width: 100%;
+      display: flex;
+    }
+
+    #div_wrapper>div {
+      flex: 1 0 0;
+    }
+    #log_list{
+      overflow: auto;
+    }
+
+
+    details>textarea {
+      border: none;
+      outline: none;
+      resize: none;
+      padding: 1em;
+      line-height: 1.5em;
+      background-color: #f7f7f7;
+      height: 28em;
+      width: 24em;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="div_wrapper">
+    <div>
+      <textarea id="the_text"></textarea>
+      <p>
+        每次事件被触发时，会将事件赋值给window的_d（对应keyDown），_u（keyUp），_p（keyPress）对象，方便在控制台下查看事件的全部属性。
+      </p>
+      <label><input id="input_fold" type="checkbox"/>log收起</label>
+      <button id='button_clear'>清空</button>
+      <div>
+        <input id="input_enter_send" placeholder="敲击回车发送消息"/>
+      </div>
+      <div>
+        <input id="input_only_number" placeholder="该文本框只能输入文本" />
+      </div>
+    </div>
+    <div id="log_list">
+
+    </div>
+  </div>
+
+  <script>
+    var the_text = document.querySelector('#the_text')
+    var log_list = document.querySelector('#log_list')
+    var input_fold = document.querySelector('#input_fold')
+    var button_clear = document.querySelector('#button_clear')
+    input_fold.addEventListener('change', function(event) {
+      Array.prototype.forEach.call(log_list.children, function(node) {
+        node.open = !event.target.checked
+      })
+    })
+    button_clear.addEventListener('click', function(e) {
+      removeAllChild(log_list)
+    })
+    the_text.addEventListener('keydown', function(e) {
+      log(e)
+      window._d = e
+    })
+    the_text.addEventListener('keyup', function(e) {
+      log(e)
+      window._u = e
+    })
+    the_text.addEventListener('keypress', function(e) {
+      log(e)
+      window._p = e
+    })
+
+    function removeAllChild(ele) {
+      while (ele.firstChild) {
+        ele.removeChild(ele.firstChild);
+      }
+    }
+
+    function log(event) {
+      var inf = {
+        type: event.type,
+        extr: {
+          altKey: event.altKey,
+          ctrlKey: event.ctrlKey,
+          metaKey: event.metaKey,
+          shiftKey: event.shiftKey
+        },
+        code: {
+          keyCode: event.keyCode,
+          charCode: event.charCode,
+          key: event.key,
+          which: event.which
+        },
+        other: {
+          repeat: event.repeat
+        }
+      }
+      createEle(inf)
+    }
+
+    function createEle(inf) {
+      var details = document.createElement('details')
+      var summary = document.createElement('summary')
+      var textarea = document.createElement('textarea')
+      textarea.setAttribute('spellcheck', 'false')
+      summary.innerHTML = inf.type
+      textarea.value = JSON.stringify(inf, null, '  ')
+      details.append(summary)
+      details.open = !input_fold.checked
+      details.append(textarea)
+      log_list.append(details)
+    }
+    /**/
+    var input_enter_send=document.querySelector('#input_enter_send')
+    var input_only_number=document.querySelector('#input_only_number')
+    input_enter_send.addEventListener('keypress',function(event){
+      if(event.keyCode){
+      }
+      event.target.value=''
+      alert('消息已发送成功')
+    })
+  </script>
+</body>
+
+</html>
