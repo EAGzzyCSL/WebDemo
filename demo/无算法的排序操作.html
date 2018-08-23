@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>FlexSort</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    main {
+      width: 50em;
+      display: flex;
+      flex-direction: column;
+    }
+
+    input,
+    span {
+      width: 3em;
+      text-align: center;
+      font-size: 16px;
+      padding: 0;
+    }
+
+    span {
+      color: red;
+    }
+
+    .span-list,
+    .input-list {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .span-list {
+      margin-top: 1em;
+      flex-direction: row-reverse;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <h1>type an array of number and sort without any algorithm</h1>
+    <main>
+      <div class="input-list"></div>
+      <div class="span-list"></div>
+    </main>
+    <p>我必须得承认这个有点标题党</p>
+    <p>不过我也确实没有编写排序的算法代码</p>
+    <p>或者是调用qsort之类的排序库</p>
+    <p>夸张一点，这是一个纯css的排序操作</p>
+    <p>留个尾巴，如果等到attr函数实现了，甚至可能完全不依赖js代码</p>
+  </div>
+  <script>
+    const main = document.querySelector('main')
+    const inputList = document.querySelector('.input-list')
+    const spanList = document.querySelector('.span-list')
+    const fill = (n) => {
+      for (let i = 0; i < n; i++) {
+        const input = document.createElement('input')
+        const span = document.createElement('span')
+        const div = document.createElement('div')
+        div.setAttribute('class', 'item')
+        inputList.appendChild(input)
+        spanList.appendChild(span)
+        input.addEventListener('input', e => {
+          span.innerHTML = e.target.value
+          span.style.order = e.target.value
+        })
+      }
+    }
+    fill(10)
+  </script>
+</body>
+
+</html>
